@@ -110,7 +110,6 @@ const events = {
 
     <div class="calendar w-12 h-5">
       <div class="timeline">
-        <div class="spacer"></div>
         <div class="time-marker">9 AM</div>
         <div class="time-marker">10 AM</div>
         <div class="time-marker">11 AM</div>
@@ -124,13 +123,10 @@ const events = {
       </div>
       <div class="days">
         <div class="day mon">
-          <div class="date">
-            <p class="date-num m-0">{{ selectedDate.format('DD') }}</p>
-            <p class="date-day m-0">{{ selectedDate.format('ddd') }}</p>
-          </div>
+         
           <div class="events">
             <div
-              class="event start-3 end-5 securities"
+              class="event start-9 end-5 securities px-4 py-2"
               v-for="event in events.tasks &&
               events.tasks.filter((event) => event.date == selectedDate.format('DD/MM/YYYY'))"
               :key="event.id"
@@ -138,8 +134,28 @@ const events = {
                 ('start-' + event['start-time'].slice(0, 2), 'end-' + event['end-time'].slice(0, 2))
               "
             >
-              <p class="title">Securities Regulation</p>
-              <p class="time">3 PM - 5 PM</p>
+              <p class="text-xl m-0 font-semibold	">Securities Regulation</p>
+              <p class="m-0 font-light">
+                <span v-for="(member, index) in event.members" :key="member.name">
+                  {{ member.name }}
+                  <span v-if="index < event.members.length - 1">and </span>
+                </span>
+              </p>
+              <div class="flex justify-content-between align-items-center my-3 w-auto">
+                <div class="img-member">
+                  <img
+                    v-for="member in event.members"
+                    :key="member.name"
+                    :src="member.avatar_url"
+                    alt="avatar"
+                    class="w-2rem border-circle border-3 border-white border-solid"
+                  />
+                </div>
+                <p class="m-0">
+                  {{ event['start-time'] }} - {{ event['end-time'] }}
+                </p>
+
+              </div>
             </div>
           </div>
         </div>
@@ -182,7 +198,7 @@ $eventColor: #043ddbd9;
 
 // Place on Timeline
 .start-9 {
-  grid-row-start: 0;
+  grid-row-start: 1;
 }
 .start-10 {
   grid-row-start: 2;
@@ -282,5 +298,14 @@ $eventColor: #043ddbd9;
   display: inline;
   font-size: 3rem;
   font-weight: 100;
+}
+
+.img-member img { 
+  @for $i from 1 through 4 { 
+    &:nth-child(#{$i}) { 
+      position: relative;
+      left: calc(-7px*$i); 
+    }
+  }
 }
 </style>
