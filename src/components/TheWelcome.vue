@@ -39,8 +39,8 @@ const events = {
     {
       id: 2,
       date: '16/07/2023',
-      'start-time': '10:00',
-      'end-time': '11:20',
+      'start-time': '9:00',
+      'end-time': '13:30',
       title: 'Software Testing',
       members: [
         {
@@ -108,30 +108,29 @@ const events = {
     <h1>OnGoing</h1>
     <!-- Todo Create hour agenda for selected day -->
 
-    <div class="calendar w-12 h-5">
+    <div class="calendar w-12 m-0">
       <div class="timeline">
-        <div class="time-marker">9 AM</div>
-        <div class="time-marker">10 AM</div>
-        <div class="time-marker">11 AM</div>
-        <div class="time-marker">12 PM</div>
-        <div class="time-marker">1 PM</div>
-        <div class="time-marker">2 PM</div>
-        <div class="time-marker">3 PM</div>
-        <div class="time-marker">4 PM</div>
-        <div class="time-marker">5 PM</div>
-        <div class="time-marker">6 PM</div>
+        <div class="time flex flex-wrap justify-content-center align-items-center"
+          v-for="hour in 24"
+        >
+        <p>
+          {{ moment({hour: hour-1}).format('HH:mm') }}
+        </p>
+        </div>
       </div>
       <div class="days">
         <div class="day mon">
          
           <div class="events">
             <div
-              class="event start-9 end-5 securities px-4 py-2"
+              class="event securities px-4 py-2"
               v-for="event in events.tasks &&
               events.tasks.filter((event) => event.date == selectedDate.format('DD/MM/YYYY'))"
               :key="event.id"
-              :class="
-                ('start-' + event['start-time'].slice(0, 2), 'end-' + event['end-time'].slice(0, 2))
+              :class="(
+                'start-' + moment({hour: event['start-time']}).add(1, 'hour').format('H')
+                + ' ' + 
+                'end-' + moment({hour: event['end-time']}).add(1, 'hour').format('H'))
               "
             >
               <p class="text-xl m-0 font-semibold	">Securities Regulation</p>
@@ -165,7 +164,7 @@ const events = {
 </template>
 
 <style scoped lang="scss">
-$numHours: 10;
+$numHours: 24;
 $timeHeight: 60px;
 $calBgColor: #fff1f800;
 $eventColor: #043ddbd9;
@@ -179,7 +178,10 @@ $eventColor: #043ddbd9;
 
 .timeline {
   display: grid;
-  grid-template-rows: repeat($numHours, $timeHeight);
+  grid-template-rows: repeat(24, auto);
+  .time{
+    border-bottom: 1px solid;
+  }
 }
 
 .days {
@@ -197,58 +199,37 @@ $eventColor: #043ddbd9;
 }
 
 // Place on Timeline
-.start-9 {
-  grid-row-start: 1;
-}
-.start-10 {
-  grid-row-start: 2;
-}
+@for $i from 0 through $numHours {
 
-.start-12 {
-  grid-row-start: 4;
-}
+  .start-#{$i} {
+    grid-row-start: #{$i};
+  }
+  .end-#{$i} {
+    grid-row-end: #{$i};
+  }
 
-.start-1 {
-  grid-row-start: 5;
-}
+  // .start-#{$i}-demi {
+  //   grid-row-start: #{($i + $i * 0.5) * 3};
+  // }
+  // .end-#{$i}-demi {
+  //   grid-row-end: #{(($i + $i * 0.5) * 3)};
+  // }
 
-.start-2 {
-  grid-row-start: 6;
-}
+  // .start-#{$i}-quarter {
+  //   grid-row-start: #{($i + $i * 0.25) * 3};
+  // }
+  
+  // .end-#{$i}-quarter {
+  //   grid-row-end: #{($i + $i * 0.25) * 3};
+  // }
+  
+  // .start-#{$i}-three-quarter {
+  //   grid-row-start: #{($i + $i * 0.75) * 3};
+  // }
 
-.start-3 {
-  grid-row-start: 7;
-}
-
-.start-4 {
-  grid-row-start: 8;
-}
-
-.start-5 {
-  grid-row-start: 9;
-}
-
-.end-12 {
-  grid-row-end: 4;
-}
-
-.end-1 {
-  grid-row-end: 5;
-}
-.end-2 {
-  grid-row-end: 6;
-}
-
-.end-3 {
-  grid-row-end: 7;
-}
-
-.end-4 {
-  grid-row-end: 8;
-}
-
-.end-5 {
-  grid-row-end: 9;
+  // .end-#{$i}-three-quarter {
+  //   grid-row-end: #{($i + $i * 0.75) * 3};
+  // }
 }
 
 .title {
