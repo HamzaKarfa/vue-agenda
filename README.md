@@ -44,3 +44,8 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### Drag and drop meet
+```
+[Drag and drop](https://vueschool.io/articles/vuejs-tutorials/how-do-i-drag-and-drop-in-vue/)
+```

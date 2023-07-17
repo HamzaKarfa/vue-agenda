@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, onMounted, onUpdated, ref } from 'vue'
+import { onMounted, onUpdated, ref } from 'vue'
 import moment from 'moment'
 import Button from 'primevue/button'
 
 let selectedDate: any = ref(moment())
 let monthBefore: any = ref(moment().subtract(1, 'months'))
 let monthAfter: any = ref(moment().add(1, 'months'))
-
-onBeforeMount(() => {})
 
 onMounted(() => {
   console.log('mounted')
@@ -23,7 +21,7 @@ const events = {
       id: 1,
       date: '17/07/2023',
       'start-time': '09:00',
-      'end-time': '10:00',
+      'end-time': '10:30',
       title: 'Mobile app design',
       members: [
         {
@@ -38,9 +36,26 @@ const events = {
     },
     {
       id: 2,
-      date: '16/07/2023',
+      date: '18/07/2023',
       'start-time': '9:00',
       'end-time': '13:30',
+      title: 'Software Testing',
+      members: [
+        {
+          name: 'Anita',
+          avatar_url: 'https://reqres.in/img/faces/3-image.jpg'
+        },
+        {
+          name: 'David',
+          avatar_url: 'https://reqres.in/img/faces/3-image.jpg'
+        }
+      ]
+    },
+    {
+      id: 3,
+      date: '17/07/2023',
+      'start-time': '15:00',
+      'end-time': '17:30',
       title: 'Software Testing',
       members: [
         {
@@ -80,9 +95,10 @@ const events = {
     </div>
     <div class="flex align-items-center justify-content-between w-12">
       <Button
-        v-for="n in 7"
+        v-for="n in 5"
         text
         raised
+        :key="n"
         class="flex flex-column align-items-center justify-content-center py-4 m-4"
         :class="[n == 1 ? 'bg-blue-500 text-white' : 'surface-100 hover:surface-200 text-blue-500']"
         rounded
@@ -112,6 +128,7 @@ const events = {
       <div class="timeline">
         <div class="time flex flex-wrap justify-content-center align-items-center"
           v-for="hour in 24"
+          :key="hour"
         >
         <p>
           {{ moment({hour: hour-1}).format('HH:mm') }}
@@ -119,8 +136,7 @@ const events = {
         </div>
       </div>
       <div class="days">
-        <div class="day mon">
-         
+        <div class="day">
           <div class="events">
             <div
               class="event securities px-4 py-2"
@@ -129,10 +145,13 @@ const events = {
               :key="event.id"
               :class="(
                 'start-' + moment({hour: event['start-time']}).add(1, 'hour').format('H')
+                // + '-' + parseInt(event['start-time'].slice(-2)) / 15
                 + ' ' + 
                 'end-' + moment({hour: event['end-time']}).add(1, 'hour').format('H'))
-              "
+                // + '-' + parseInt(event['end-time'].slice(-2)) / 15
+                "
             >
+            {{  }}
               <p class="text-xl m-0 font-semibold	">Securities Regulation</p>
               <p class="m-0 font-light">
                 <span v-for="(member, index) in event.members" :key="member.name">
@@ -159,13 +178,14 @@ const events = {
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-$numHours: 24;
-$timeHeight: 60px;
+$numHours: 24 * 4;
+$timeHeight: 20px;
 $calBgColor: #fff1f800;
 $eventColor: #043ddbd9;
 
@@ -201,35 +221,12 @@ $eventColor: #043ddbd9;
 // Place on Timeline
 @for $i from 0 through $numHours {
 
-  .start-#{$i} {
-    grid-row-start: #{$i};
-  }
-  .end-#{$i} {
-    grid-row-end: #{$i};
-  }
-
-  // .start-#{$i}-demi {
-  //   grid-row-start: #{($i + $i * 0.5) * 3};
-  // }
-  // .end-#{$i}-demi {
-  //   grid-row-end: #{(($i + $i * 0.5) * 3)};
-  // }
-
-  // .start-#{$i}-quarter {
-  //   grid-row-start: #{($i + $i * 0.25) * 3};
-  // }
-  
-  // .end-#{$i}-quarter {
-  //   grid-row-end: #{($i + $i * 0.25) * 3};
-  // }
-  
-  // .start-#{$i}-three-quarter {
-  //   grid-row-start: #{($i + $i * 0.75) * 3};
-  // }
-
-  // .end-#{$i}-three-quarter {
-  //   grid-row-end: #{($i + $i * 0.75) * 3};
-  // }
+    .start-#{$i} {
+      grid-row-start: #{$i * 4};
+    }
+    .end-#{$i} {
+      grid-row-end: #{$i * 4};
+    }
 }
 
 .title {
